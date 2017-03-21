@@ -8,6 +8,7 @@
 <body>
   <div id="app" style= "font-family: 'Noto Sans TC','Open Sans', sans-serif;"><!--google font-->
     <gmap-map
+      :style="currentStyle"
       :center="center"
       :zoom="12"
       style="width: 80%; height: 100% ;float:left;">
@@ -23,11 +24,16 @@
       </gmap-marker>
       <div slot="visible" style="top: 5%; right: 5%; color: #4F4F4F; position: absolute; z-index: 100">
          <h2>  {{statusText}} </h2>
+         
       </div>
     </gmap-map>
   </div>
 <div id="note" style="width: 20%; height: 100%;color: #4F4F4F; float:left; font-family: 'Noto Sans TC','Open Sans',sans-serif;">
-  <center><h2>課程介紹:</h2></center>
+  <center><h2><p>課程介紹:</p>
+  <info >
+      
+  </info>
+  </h2></center>
 
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.1.6/vue.js"></script>
@@ -35,7 +41,7 @@
 <script src="https://cdn.rawgit.com/crew1274/vue2-google-map-example/0934045f/vue-google-maps.js"></script>
 
 <script>
-Vue.use(VueGoogleMap, {load: {key: 'AIzaSyBJElK1Oartgr4lYVuNYTaO6GpTlKcXQxk'},});
+Vue.use(VueGoogleMap, {load: {key: 'AIzaSyBJElK1Oartgr4lYVuNYTaO6GpTlKcXQxk',libraries: 'places'},});
 
 document.addEventListener('DOMContentLoaded', function() {
   new Vue({
@@ -46,43 +52,41 @@ document.addEventListener('DOMContentLoaded', function() {
       infoWindowPos: {lat:0,lng:0},
       infoWinOpen: false,
       currentMidx: null,
+
       statusText: '',
+      //地標
       markers: [
         {
         position: [22.9809000, 120.2291000],
-        text: 'Engilsh Test!Engilsh Test!Engilsh Test!Engilsh Test!Engilsh Test!Engilsh Test!',
-        infoText: 'Marker 1'
-
+        text: 'Engilsh Test',
+        infoText: '說明內容'
         }, 
       {
         position: [22.9808000, 120.2200000],
         text: '中文測試',
-        infoText: 'Marker 2'
+        infoText: '說明內容'
       },
       ]
     },
 
     methods:{
-                toggleInfoWindow: function (marker,idx){
-
-                    this.infoWindowPos = marker.position ;
-                    this.infoContent = marker.infoText;
-
-                    //check if its the same marker that was selected if yes toggle
-                    if(this.currentMidx == idx)
-                    {
-                        this.infoWinOpen = !this.infoWinOpen
-                    }
-                    //if different marker set infowindow to open and reset current marker index
-                    else
-                    {
-                        this.infoWinOpen = true;
-                        this.currentMidx = idx;
-
-                    }
+        setPlace(place) {
+        this.latLng = {
+          lat: place.geometry.location.lat(),
+          lng: place.geometry.location.lng(),
+        }},
+        toggleInfoWindow: function (marker,idx){
+        this.infoWindowPos = marker.position ;
+        this.infoContent = marker.infoText;
+//check if its the same marker that was selected if yes toggle
+        if(this.currentMidx == idx)
+        {this.infoWinOpen = !this.infoWinOpen}
+        //if different marker set infowindow to open and reset current marker index
+        else
+         {this.infoWinOpen = true;
+          this.currentMidx = idx;}
                 }
-
-            }
+                }
   });
 });
 

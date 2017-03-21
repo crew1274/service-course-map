@@ -56,22 +56,22 @@
             },
 
             methods:{
-                toggleInfoWindow: function (marker,idx){
+                    toggleInfoWindow: function (marker,idx){
 
                     this.infoWindowPos = marker.position ;
                     this.infoContent = marker.infoText;
 
-                    //check if its the same marker that was selected if yes toggle
+                    //判斷是否與上一個狀態一樣
                     if(this.currentMidx == idx)
                     {
+                        //一樣不更換winopen位置
                         this.infoWinOpen = !this.infoWinOpen
                     }
-                    //if different marker set infowindow to open and reset current marker index
                     else
                     {
+                        //不一樣更換winopen位置
                         this.infoWinOpen = true;
                         this.currentMidx = idx;
-
                     }
                 }
 
