@@ -1,12 +1,12 @@
 <html>
 <head>
-  <meta charset="utf-8">
-  <title>服務學習課程地圖</title>
+<meta charset="utf-8">
+<title>服務學習課程地圖</title>
 </head>
 <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
 <link href="https://fonts.googleapis.com/earlyaccess/notosanstc.css" rel="stylesheet">
 <body>
-  <div id="app" style= "font-family: 'Noto Sans TC','Open Sans', sans-serif;">
+  <div id="app" style= "font-family: 'Noto Sans TC','Open Sans', sans-serif;"><!--google font-->
     <gmap-map
       :center="center"
       :zoom="12"
@@ -21,33 +21,27 @@
         @mouseover="statusText = m.text"
         @mouseout="statusText = null">
       </gmap-marker>
-      <div slot="visible" style="top: 5%; right: 5%; color: #272727; position: absolute; z-index: 100">
+      <div slot="visible" style="top: 5%; right: 5%; color: #4F4F4F; position: absolute; z-index: 100">
          <h2>  {{statusText}} </h2>
       </div>
     </gmap-map>
   </div>
-<div id="note" style=" 
-width: 20%; height: 100%;float:left;
-font-family: 'Noto Sans TC','Open Sans',sans-serif;">
+<div id="note" style="width: 20%; height: 100%;color: #4F4F4F; float:left; font-family: 'Noto Sans TC','Open Sans',sans-serif;">
   <center><h2>課程介紹:</h2></center>
-  <h2>  </h2>
+
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.1.6/vue.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.16.4/lodash.js"></script>
 <script src="https://cdn.rawgit.com/crew1274/vue2-google-map-example/0934045f/vue-google-maps.js"></script>
 
 <script>
-Vue.use(VueGoogleMap, {
-  load: {
-    key: 'AIzaSyBJElK1Oartgr4lYVuNYTaO6GpTlKcXQxk'
-  },
-});
+Vue.use(VueGoogleMap, {load: {key: 'AIzaSyBJElK1Oartgr4lYVuNYTaO6GpTlKcXQxk'},});
 
 document.addEventListener('DOMContentLoaded', function() {
   new Vue({
     el: '#app',
     data: {
-      center: {lat: 22.9809709, lng: 120.2291225},
+      center: {lat: 22.9809709, lng: 120.2291225},//台南地標
       infoContent: '',
       infoWindowPos: {lat:0,lng:0},
       infoWinOpen: false,
@@ -62,7 +56,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }, 
       {
         position: [22.9808000, 120.2200000],
-        text: '中文測試!中文測試!中文測試!中文測試!中文測試!中文測試!',
+        text: '中文測試',
         infoText: 'Marker 2'
       },
       ]
