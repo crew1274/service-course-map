@@ -1,134 +1,84 @@
+<html>
 <head>
-  <style>
-  .map-container {
-    width: 400px;
-    height: 400px;
-  }
-  </style>
+<meta charset="utf-8">
+<title>服務學習課程地圖</title>
 </head>
+<link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+<link href="https://fonts.googleapis.com/earlyaccess/notosanstc.css" rel="stylesheet">
 <body>
-  <script>
-  var tests = [];
+  <div id="app" style= "font-family: 'Noto Sans TC','Open Sans', sans-serif;"><!--google font-->
+    <gmap-map
+      :style="currentStyle"
+      :center="center"
+      :zoom="12"
+      style="width: 100%; height: 100% ;float:left;">
 
-  </script>
-
-  <div id="test1">
-    <h2>Test 1</h2>
-    Passes if: You can pan around this map without it being snapped back to the center
-    <google-map :center="{lat: 1.38, lng: 103.8}" :zoom="12"
-      class="map-container">
-    </google-map>
+<gmap-info-window :options="infoOptions" :position="infoWindowPos" :opened="infoWinOpen" :content="infoContent" @closeclick="infoWinOpen=false" >
+</gmap-info-window>
+      <gmap-marker
+         v-for="(m,i) in markers"
+        :position="m.position"
+        :clickable="true"
+        :draggable="true"
+        @click="toggleInfoWindow(m,i)"
+        @mouseover="statusText = m.text"
+        @mouseout="statusText = null">
+      </gmap-marker>
+      <div slot="visible" style="top: 5%; right: 5%; color: #4F4F4F; position: absolute; z-index: 100">
+         <h2>  {{statusText}} </h2>
+      </div>
+    </gmap-map>
   </div>
-  <script>
-    tests.push(() => {
-      new Vue({
-        el: '#test1',
-      })
-    });
-  </script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.1.6/vue.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.16.4/lodash.js"></script>
+<script src="https://cdn.rawgit.com/crew1274/vue2-google-map-example/0934045f/vue-google-maps.js"></script>
 
-  <div id="test2">
-    <h2>Test 2</h2>
-    Passes if: Clicking the button changes the center
-    <button @click="changeCenter">Change Center</button>
-    <button @click="changeZoom">Change Zoom</button>
-    <google-map :center="changingCenter" :zoom="changingZoom" class="map-container">
-    </google-map>
-  </div>
-
-  <script>
-    tests.push(() => {
-      new Vue({
-        el: '#test2',
-        data: {
-          changingZoom: 12,
-          changingCenter: {lat: 1.38, lng: 103.8},
-        },
-        methods: {
-          changeCenter() {
-            this.changingCenter = {
-              lat: 1.38 + Math.random() * 0.3,
-              lng: 103.8 + Math.random() * 0.1
-            }
-          },
-          changeZoom() {
-            this.changingZoom = Math.floor(5 + Math.random() * 10)
-          },
-        }
-      })
-    });
-  </script>
-
-  <div id="test3">
-    <h2>Test 3</h2>
-    Passes if: Resize of (1) is artefact-free. Resize of (2) preserves the center
-    <button @click="changeSize">Change Size</button>
-    <br/>
-    (1):
-    <google-map :center="{lat:1.38, lng:103.8}" :zoom="12" ref="resizeMap1"
-     :style="changingSize">
-    </google-map>
-    (2):
-    <google-map :center="{lat:1.38, lng:103.8}" :zoom="12" ref="resizeMap2"
-     :style="changingSize">
-    </google-map>
-  </div>
-  <script>
-    tests.push(() => new Vue({
-      el: '#test3',
-      data: {
-        changingWidth: 200,
-        changingHeight: 200,
-        i: 0,
+<script>
+Vue.use(VueGoogleMap, {load: {key: 'AIzaSyBJElK1Oartgr4lYVuNYTaO6GpTlKcXQxk',libraries: 'places'},});
+document.addEventListener('DOMContentLoaded', function() {
+  new Vue({
+    el: '#app',
+    data: {
+      center: {lat: 22.9809709, lng: 120.2291225},//台南地標
+      infoContent: '',
+      infoWindowPos: {lat:0,lng:0},
+      infoWinOpen: false,
+      currentMidx: null,
+      statusText: '',
+      //地標
+      markers: [
+        {
+        position:{lat: 22.9809000, lng:120.2291000},
+        text: 'Engilsh Test',
+        infoText: '說明內容'
+        }, 
+      {
+        position: {lat: 22.9809000, lng:120.2261000},
+        text: '中文測試',
+        infoText: '說明內容'
       },
-      computed: {
-        changingSize() {
-          return {
-            width: this.changingWidth + 'px',
-            height: this.changingHeight + 'px',
-          }
-        }
-      },
-      methods: {
-        changeCenter() {
-          this.changingCenter = {
-            lat: 1.38 + Math.random() * 0.3,
-            lng: 103.8 + Math.random() * 0.1
-          }
-        },
-        changeZoom() {
-          this.changingZoom = Math.floor(5 + Math.random() * 10)
-        },
-        changeSize() {
-          this.i = (this.i + 1) % 2;
-          this.changingWidth = 200 + this.i * 300;
-          this.changingHeight = 200 + Math.random() * 150;
-          this.$nextTick(() => {
-            this.$refs.resizeMap1.resize();
-            this.$refs.resizeMap2.resizePreserveCenter();
-          })
-        }
-      }
-    }));
-  </script>
-
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.1.6/vue.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.16.4/lodash.js"></script>
-  <script src="https://cdn.rawgit.com/crew1274/vue2-google-map-example/0934045f/vue-google-maps.js"></script>
-
-  <script>
-    VueGoogleMap.load({
-      key: 'AIzaSyBzlLYISGjL_ovJwAehh6ydhB56fCCpPQw',
-      v: '3.26',
-    });
-
-    document.addEventListener('DOMContentLoaded', function() {
-      Vue.component('google-map', VueGoogleMap.Map);
-
-      for (let test of tests) {
-        test();
-      }
-    });
-  </script>
-
+      ]
+    },
+    methods:{
+        setPlace(place) {
+        this.latLng = {
+          lat: place.geometry.location.lat(),
+          lng: place.geometry.location.lng(),
+        }},
+        toggleInfoWindow: function (marker,idx){
+        this.infoWindowPos = marker.position ;
+        this.infoContent = marker.infoText;
+//check if its the same marker that was selected if yes toggle
+        if(this.currentMidx == idx)
+        {this.infoWinOpen = !this.infoWinOpen}
+        //if different marker set infowindow to open and reset current marker index
+        else
+         {this.infoWinOpen = true;
+          this.currentMidx = idx;}
+                }
+                }
+  });
+});
+</script>
 </body>
+</html>
