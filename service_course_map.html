@@ -11,31 +11,25 @@
       :style="currentStyle"
       :center="center"
       :zoom="12"
-      style="width: 80%; height: 100% ;float:left;">
-
+      style="width: 100%; height: 100% ; float:left;">
+      <gmap-info-window :options="infoOptions" :position="infoWindowPos" :opened="infoWinOpen" :content="infoContent" @closeclick="infoWinOpen=false" >
+      </gmap-info-window>
       <gmap-marker
          v-for="(m,i) in markers"
-        :position="{lat: m.position[0], lng: m.position[1]}"
+        :position="m.position"
         :clickable="true"
-        :draggable="true"
+        :draggable="false"
         @click="toggleInfoWindow(m,i)"
         @mouseover="statusText = m.text"
         @mouseout="statusText = null">
       </gmap-marker>
+
       <div slot="visible" style="top: 5%; right: 5%; color: #4F4F4F; position: absolute; z-index: 100">
          <h2>  {{statusText}} </h2>
-         
       </div>
     </gmap-map>
   </div>
-<div id="note" style="width: 20%; height: 100%;color: #4F4F4F; float:left; font-family: 'Noto Sans TC','Open Sans',sans-serif;">
-  <center><h2><p>課程介紹:</p>
-  <info >
-      
-  </info>
-  </h2></center>
 
-</div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.1.6/vue.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.16.4/lodash.js"></script>
 <script src="https://cdn.rawgit.com/crew1274/vue2-google-map-example/0934045f/vue-google-maps.js"></script>
@@ -49,22 +43,21 @@ document.addEventListener('DOMContentLoaded', function() {
     data: {
       center: {lat: 22.9809709, lng: 120.2291225},//台南地標
       infoContent: '',
-      infoWindowPos: {lat:0,lng:0},
       infoWinOpen: false,
       currentMidx: null,
-
+      infoOptions:{pixelOffset: {width: 0, height: -35}},
       statusText: '',
       //地標
       markers: [
         {
-        position: [22.9809000, 120.2291000],
+        position: {lat:22.9809000,lng:120.2291000},
         text: 'Engilsh Test',
-        infoText: '說明內容'
+        infoText: 'Engilsh Test'
         }, 
       {
-        position: [22.9808000, 120.2200000],
+        position: {lat:22.9800000,lng:120.2181000},
         text: '中文測試',
-        infoText: '說明內容'
+        infoText: '中文測試wedferfetgrtehhytersdewfret<br>中文ferwferfrefw測試<br>中文測試<br>中文測試<br>中文測試<br>中文測試<br>'
       },
       ]
     },
@@ -78,18 +71,16 @@ document.addEventListener('DOMContentLoaded', function() {
         toggleInfoWindow: function (marker,idx){
         this.infoWindowPos = marker.position ;
         this.infoContent = marker.infoText;
-//check if its the same marker that was selected if yes toggle
+        //check if its the same marker that was selected if yes toggle
         if(this.currentMidx == idx)
         {this.infoWinOpen = !this.infoWinOpen}
         //if different marker set infowindow to open and reset current marker index
         else
          {this.infoWinOpen = true;
           this.currentMidx = idx;}
-                }
-                }
+                }}
   });
 });
-
 </script>
 </body>
 </html>
