@@ -23,7 +23,6 @@
         @mouseover="statusText = m.text"
         @mouseout="statusText = null">
       </gmap-marker>
-
       <div slot="visible" style="top: 5%; right: 5%; color: #4F4F4F; position: absolute; z-index: 100">
          <h2>  {{statusText}} </h2>
       </div>
@@ -41,7 +40,7 @@ document.addEventListener('DOMContentLoaded', function() {
   new Vue({
     el: '#app',
     data: {
-      center: {lat: 22.9809709, lng: 120.2291225},//台南地標
+      center: {lat: 23.0197903, lng: 120.4090523},//台南地標
       infoContent: '',
       infoWinOpen: false,
       currentMidx: null,
@@ -50,14 +49,19 @@ document.addEventListener('DOMContentLoaded', function() {
       //地標
       markers: [
         {
-        position: {lat:22.9809000,lng:120.2291000},
-        text: 'Engilsh Test',
-        infoText: 'Engilsh Test'
+        position: {lat:23.0107572,lng:120.4146771},
+        text: '基督教長老教會-岡林教會',
+        infoText: '<h2>岡林教會相關的課程資訊:</h2> <p>服務學習(三)-運用遠距課輔關懷偏鄉弱勢學童	徐之昇助理教授	學務處課指組	104(一)、104(二)</p> <p>社會設計的創新方案規劃與實踐	方雅慧博士後研究員	通識教育中心	104(一)</p> <p>服務學習(三)-資訊服務	楊中平副教授	資訊系	104(一)</p> <p>英語智能與社區服務	高實玫教授/鄒文莉教授	通識中心	104(二)、105(二)</p> <p>社會設計的方案規劃與實踐	方雅慧博士後研究員	通識中心	104(二)、105(一)</p> <p>社會設計的方案規劃與實踐	方雅慧博士後研究員	通識中心	104(二)、105(一)</p>'
         }, 
       {
-        position: {lat:22.9800000,lng:120.2181000},
-        text: '中文測試',
-        infoText: '中文測試wedferfetgrtehhytersdewfret<br>中文ferwferfrefw測試<br>中文測試<br>中文測試<br>中文測試<br>中文測試<br>'
+        position: {lat:23.0094592,lng:120.408578},
+        text: '公舘社區發展協會',
+        infoText: '<h2>公舘社區發展協會相關的課程資訊:</h2><p>人文創新與社會實踐	王秀雲副教授等7人	通識中心	103(二)</p> <p>人道建築的在地規劃與實踐	簡聖芬副教授	通識教育中心	104(一)</p> <p>社會設計的創新方案規劃與實踐	方雅慧博士後研究員	通識教育中心	104(一)、104(二)、105(一)</p> <p>英語智能與社區服務	高實玫教授/鄒文莉教授	通識中心	104(二)</p> <p>社區規劃與地方行銷	張秀慈助理教授	都計系	104(二)</p> <p>自由軟體與社群經營	楊中平副教授	資訊系	104(二)、105(一)</p> <p>創意行銷:社區、文化與場域	仲曉玲助理教授/陳慧琴助理教授	通識中心	105(二)</p>'
+      },
+      {
+        position: {lat:23.0628608,lng:120.3812068},
+        text: '左鎮國小',
+        infoText: '<h2>左鎮國小相關的課程資訊:</h2> <p>人道建築的在地規劃與實踐 簡聖芬副教授 通識教育中心 105(一)</p>	<p>社會設計的方案規劃與實踐	方雅慧博士後研究員	通識中心	105(一)</p>	<p>社會設計的引導與協作領導	方雅慧博士後研究員	通識中心	105(二)</p>	<p>西拉雅語文數位復育及線上教育	楊中平副教授/盧文祥副教授/陳麗君副教授/方雅慧博士後研究員	通識中心	105(二)</p>'
       },
       ]
     },
