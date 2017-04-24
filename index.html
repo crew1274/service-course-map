@@ -1,83 +1,79 @@
+<html>
+<head>
+<meta charset="utf-8">
+<title>成功大學服務學習課程地圖</title>
+</head>
+<link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+<link href="https://fonts.googleapis.com/earlyaccess/notosanstc.css" rel="stylesheet">
 <body>
-<div id="root">
-    A basic example of using a single infowindow for 3 markers.
-
+  <div id="app" style= "font-family: 'Noto Sans TC','Open Sans', sans-serif;">
     <gmap-map
-            :center="center"
-            :zoom="15"
-            style="width: 100%; height: 500px"
-    >
-
-        <gmap-marker
-                v-for="(m,i) in markers"
-                :position="m.position"
-                :clickable="true"
-                @click="toggleInfoWindow(m,i)">
-        </gmap-marker>
-
-
+      :center="center"
+      :zoom="10"
+      style="width: 100%; height: 100% ; float:left;">
+      <gmap-info-window :options="infoOptions" :position="infoWindowPos" :opened="infoWinOpen" :content="infoContent" @closeclick="infoWinOpen=false" >
+      </gmap-info-window>
+      <gmap-marker v-for="(m,i) in markers"
+        :position="m.position"
+        :clickable="true"
+        :draggable="false"
+        @click="toggleInfoWindow(m,i)"
+        @mouseover="statusText = m.text , img = m.img"
+        @mouseout="statusText = null , img = null">
+      </gmap-marker>
+      <div slot="visible" style="top: 5%; right: 5%; color: #4F4F4F; position: absolute; z-index: 100">
+         <h2>  {{statusText}} </h2>
+         <img v-bind:src="img" />
+      </div
     </gmap-map>
-</div>
+    <img v-bind:src="img" />
+  </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.2.1/vue.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.4/lodash.js"></script>
-<script src="vue-google-maps.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.1.6/vue.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.16.4/lodash.js"></script>
+<script src="https://cdn.rawgit.com/crew1274/vue2-google-map-example/0934045f/vue-google-maps.js"></script>
 
 <script>
+Vue.use(VueGoogleMap, {load: {key: 'AIzaSyBJElK1Oartgr4lYVuNYTaO6GpTlKcXQxk',libraries: 'places'},});
 
-    Vue.use(VueGoogleMap, {
-        load: {
-            key: 'AIzaSyBzlLYISGjL_ovJwAehh6ydhB56fCCpPQw'
-        },
-    });
+document.addEventListener('DOMContentLoaded', function() {
+  new Vue({
+    el: '#app',
+    data: {
+      center: {lat: 23.1489444, lng: 120.357624},//台南地標
+      infoContent: '',
+      infoWinOpen: false,
+      currentMidx: null,
+      infoOptions:{pixelOffset: {width: 0, height: -35}},
+      statusText: '',
+      //地標
+      markers: [{
+        position: {lat:23.0107572,lng:120.4146771},
+        text: '基督教長老教會-岡林教會',
+        img:'http://acts.pct.org.tw/Org_change/pct_imgs/C08056551_1473.jpg',
+        infoText: '<h2>基督教長老教會-岡林教會課程資訊:</h2> <p>服務學習(三)-運用遠距課輔關懷偏鄉弱勢學童	徐之昇助理教授	學務處課指組	104(一)、104(二)</p> <p>社會設計的創新方案規劃與實踐	方雅慧博士後研究員	通識教育中心	104(一)</p> <p>服務學習(三)-資訊服務	楊中平副教授	資訊系	104(一)</p> <p>英語智能與社區服務	高實玫教授/鄒文莉教授	通識中心	104(二)、105(二)</p> <p>社會設計的方案規劃與實踐	方雅慧博士後研究員	通識中心	104(二)、105(一)</p> <p>社會設計的方案規劃與實踐	方雅慧博士後研究員	通識中心	104(二)、105(一)</p>'
+        },]
+    },
 
-    document.addEventListener('DOMContentLoaded', function() {
-        new Vue({
-            el: '#root',
-            data: {
-                center: {lat: 47.376332, lng: 8.547511},
-                infoContent: '',
-                infoWindowPos: {lat:0,lng:0},
-                infoWinOpen: false,
-                currentMidx: null,
-                //optional: offset infowindow so it visually sits nicely on top of our marker
-                infoOptions:{pixelOffset: {width: 0, height: -35}},
-                markers: [{
-                    position: {lat:47.376332,lng:8.547511},
-                    infoText: 'Marker 1'
-                }, {
-                    position: {lat:47.374592, lng:8.548867},
-                    infoText: 'Marker 2<br>test'
-                }, {
-                    position: {lat:47.379592, lng:8.549867},
-                    infoText: 'Marker 3'
-                }]
-            },
-
-            methods:{
-                    toggleInfoWindow: function (marker,idx){
-
-                    this.infoWindowPos = marker.position ;
-                    this.infoContent = marker.infoText;
-
-                    //判斷是否與上一個狀態一樣
-                    if(this.currentMidx == idx)
-                    {
-                        //一樣不更換winopen位置
-                        this.infoWinOpen = !this.infoWinOpen
-                    }
-                    else
-                    {
-                        //不一樣更換winopen位置
-                        this.infoWinOpen = true;
-                        this.currentMidx = idx;
-                    }
-                }
-
-            }
-        });
-    });
-
+    methods:{
+        setPlace(place) {
+        this.latLng = {
+          lat: place.geometry.location.lat(),
+          lng: place.geometry.location.lng(),
+        }},
+        toggleInfoWindow: function (marker,idx){
+        this.infoWindowPos = marker.position ;
+        this.infoContent = marker.infoText;
+        //check if its the same marker that was selected if yes toggle
+        if(this.currentMidx == idx)
+        {this.infoWinOpen = !this.infoWinOpen}
+        //if different marker set infowindow to open and reset current marker index
+        else
+         {this.infoWinOpen = true;
+          this.currentMidx = idx;}
+                }}
+  });
+});
 </script>
-
 </body>
+</html>
