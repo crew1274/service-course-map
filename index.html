@@ -8,32 +8,36 @@
 <body>
   <div id="app" style= "font-family: 'Noto Sans TC','Open Sans', sans-serif;">
     <gmap-map
+      :style="currentStyle"
       :center="center"
       :zoom="10"
-      style="width: 75%; height: 100% ; float:left; z-index: 100;">
+      style="width: 80%; height: 100% ; float:left;">
       <gmap-info-window :options="infoOptions" :position="infoWindowPos" :opened="infoWinOpen" :content="infoContent" @closeclick="infoWinOpen=false" >
       </gmap-info-window>
-      <gmap-marker v-for="(m,i) in markers"
+      <gmap-marker
+         v-for="(m,i) in markers"
         :position="m.position"
         :clickable="true"
         :draggable="false"
         @click="toggleInfoWindow(m,i)"
-        @mouseover="statusText = m.text , img = m.img"
-        @mouseout="statusText = null , img = null">
+        @mouseover="statusText = m.text , img ='https://maps.googleapis.com/maps/api/streetview?size=300x200&location='+m.position.lat+','+m.position.lng+'&heading='+m.heading+'&pitch='+m.pitch+'&key=AIzaSyBlMomz5LAIyBZ1bOSOVb0kbxz62wZYiTI'"
+        @mouseout="statusText = null , img=null">
       </gmap-marker>
-      <div slot="visible" style="top: 0%; right: -35%; color: #4F4F4F; position: absolute;">
-         <center> <h2> {{statusText}} </h2>
-         <img v-bind:src="img" /></center> 
-      </div
+      <div slot="visible" style="top: 0%; right: -25%; color: #4F4F4F; position: relative; float:right;">
+      <h2 align="right" > {{statusText}} </h2>
+      <img v-bind:src="img" align="right" />
+      </div>
     </gmap-map>
   </div>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.1.6/vue.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.16.4/lodash.js"></script>
 <script src="https://cdn.rawgit.com/crew1274/vue2-google-map-example/0934045f/vue-google-maps.js"></script>
 
 <script>
 Vue.use(VueGoogleMap, {load: {key: 'AIzaSyBJElK1Oartgr4lYVuNYTaO6GpTlKcXQxk',libraries: 'places'},});
-
+var tail = '&heading=151.78&key=AIzaSyBlMomz5LAIyBZ1bOSOVb0kbxz62wZYiTI'
+var head ="https://maps.googleapis.com/maps/api/streetview?size=300x200"
 document.addEventListener('DOMContentLoaded', function() {
   new Vue({
     el: '#app',
@@ -45,12 +49,15 @@ document.addEventListener('DOMContentLoaded', function() {
       infoOptions:{pixelOffset: {width: 0, height: -35}},
       statusText: '',
       //地標
-      markers: [{
-        position: {lat:23.0107572,lng:120.4146771},
+      markers: [
+        {
+        position: {lat:23.0107483,lng:120.4170107},
+        heading: 245.75,
+        pitch: 7.33,
         text: '基督教長老教會-岡林教會',
-        img:'image/岡林教會.jpg',
         infoText: '<h2>基督教長老教會-岡林教會課程資訊:</h2> <p>服務學習(三)-運用遠距課輔關懷偏鄉弱勢學童	徐之昇助理教授	學務處課指組	104(一)、104(二)</p> <p>社會設計的創新方案規劃與實踐	方雅慧博士後研究員	通識教育中心	104(一)</p> <p>服務學習(三)-資訊服務	楊中平副教授	資訊系	104(一)</p> <p>英語智能與社區服務	高實玫教授/鄒文莉教授	通識中心	104(二)、105(二)</p> <p>社會設計的方案規劃與實踐	方雅慧博士後研究員	通識中心	104(二)、105(一)</p> <p>社會設計的方案規劃與實踐	方雅慧博士後研究員	通識中心	104(二)、105(一)</p>'
-        },]
+        },
+      ]
     },
 
     methods:{
